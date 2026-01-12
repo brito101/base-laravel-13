@@ -5,7 +5,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Laravel 12ase template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
+> **Laravel 12 as template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
 
 ## 📋 Table of Contents
 

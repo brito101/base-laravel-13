@@ -67,10 +67,6 @@
                                 size=4 />
                             <x-adminlte-profile-col-item title="Laravel" icon="fab fa-2x fa-laravel text-primary" size=4 />
                         </x-adminlte-profile-widget>
-
-                        <p class="text-muted">
-                            Sistema base em Laravel 10
-                        </p>
                     </div>
                 </div>
             </div>

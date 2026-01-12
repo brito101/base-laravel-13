@@ -68,8 +68,3 @@
         </div>
     </section>
 @endsection
-
-@section('adminlte_js')
-    <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/company.js') }}"></script>
-@endsection

@@ -76,6 +76,11 @@ class TextProcessor
             foreach ($xss as $e) {
                 $e->parentNode->removeChild($e);
             }
+
+            $meta = $dom->getElementsByTagName('meta');
+            foreach ($meta as $e) {
+                $e->parentNode->removeChild($e);
+            }
         }
 
         $description = $dom->saveHTML();
