@@ -5,14 +5,13 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Laravel 12 as template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
+> **Laravel 12 template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
 
 ## 📋 Table of Contents
 
 - [About the Project](#-about-the-project)
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
 - [Installation](#-installation)
 - [Configuration](#-configuration)
 - [Usage](#-usage)
@@ -23,7 +22,7 @@
 
 ## 🎯 About the Project
 
-This is a **Laravel 12mplate** developed to accelerate the development of robust administrative systems. The project incorporates best practices in development, security and architecture, being ideal for projects that require:
+This is a **Laravel 12 template** developed to accelerate the development of robust administrative systems. The project incorporates best practices in development, security and architecture, being ideal for projects that require:
 
 - **Advanced authentication system** with 2FA
 - **Granular access control** (ACL)
@@ -64,7 +63,7 @@ This is a **Laravel 12mplate** developed to accelerate the development of robust
 
 ### Backend
 - **Laravel 12** - PHP framework
-- **PHP 8.2ogramming language
+- **PHP 8.2+** - Programming language
 - **MySQL 8** - Database
 - **Redis** - Cache and sessions
 - **Docker** - Containerization
@@ -81,28 +80,6 @@ This is a **Laravel 12mplate** developed to accelerate the development of robust
 - **PEST** - Testing framework
 - **Laravel Debugbar** - Debug toolbar
 
-## 🏗️ Architecture
-
-```
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── Admin/          # Administrative controllers
-│   │   ├── Api/            # REST APIs
-│   │   └── Auth/           # Authentication
-│   ├── Models/             # Eloquent models
-│   └── Providers/          # Service providers
-├── resources/
-│   ├── views/              # Blade views
-│   ├── js/                 # JavaScript
-│   └── sass/               # SASS styles
-├── routes/
-│   ├── web.php             # Web routes
-│   └── api.php             # API routes
-└── database/
-    ├── migrations/          # Migrations
-    └── seeders/            # Seeders
-```
-
 ## 🚀 Installation
 
 ### Prerequisites
@@ -118,7 +95,7 @@ git clone <repository-url>
 cd base-laravel
 ```
 
-2re the environment**
+2. **Prepare the environment**
 ```bash
 cp .env.example .env
 ```
@@ -135,7 +112,7 @@ composer install
 npm install
 ```
 
-5*Configure Laravel**
+5. **Configure Laravel**
 ```bash
 php artisan key:generate
 php artisan jwt:secret
@@ -144,7 +121,7 @@ php artisan jwt:secret
 6. **Configure Docker (optional)**
 ```bash
 # Alias for Laravel Sail
-alias sail=[ -f sail ] && sh sail || sh vendor/bin/sail'
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 ```
 
 7. **Run migrations**
@@ -180,15 +157,16 @@ npm run build
 
 ```env
 # Application
-APP_NAME=Base Laravel"
+APP_NAME="Base Laravel"
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost
 
 # Database
 DB_CONNECTION=mysql
-DB_HOST=127.000.1
-DB_PORT=3306DB_DATABASE=base_laravel
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=base_laravel
 DB_USERNAME=root
 DB_PASSWORD=
 
@@ -197,8 +175,10 @@ JWT_SECRET=your-jwt-secret
 JWT_TTL=60
 
 # Redis
-REDIS_HOST=127.0.00.1EDIS_PASSWORD=null
-REDIS_PORT=6379`
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
 
 ### Docker Compose
 
@@ -217,7 +197,9 @@ The project includes complete Docker configuration with:
 
 **Default credentials:**
 - **Email:** programador@base.com
-- **Password:** 12345678## Useful Commands
+- **Password:** 12345678
+
+### Useful Commands
 
 ```bash
 # Development
@@ -244,14 +226,16 @@ sail artisan storage:link     # Storage symbolic link
 # Login
 POST /api/v1/login
 {
- email":user@example.com,password: ord"
+    "email": "user@example.com",
+    "password": "password"
 }
 
 # Register
-POST /api/v1gister
+POST /api/v1/register
 {
-    name": User Name",
- email":user@example.com,password: word"
+    "name": "User Name",
+    "email": "user@example.com",
+    "password": "password"
 }
 
 # Refresh Token
@@ -262,8 +246,8 @@ Authorization: Bearer {token}
 ### Available Endpoints
 
 - `GET /api/v1/admin/users` - List users
-- `GET /api/v1in/profile` - User profile
-- `POST /api/v1logout` - Logout
+- `GET /api/v1/admin/profile` - User profile
+- `POST /api/v1/logout` - Logout
 
 ## 📁 Project Structure
 
@@ -297,7 +281,7 @@ Authorization: Bearer {token}
 
 ### Code Standards
 
-- **PSR-12HP** coding standard
+- **PSR-12** - PHP coding standard
 - **Laravel Pint** - Code style fixer
 - **PEST** - Testing framework
 - **Conventional Commits** - Commit standard
@@ -310,7 +294,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 - [Laravel](https://laravel.com) - PHP framework
 - [AdminLTE](https://adminlte.io) - Administrative template
--Spatie](https://spatie.be) - Laravel packages
+- [Spatie](https://spatie.be) - Laravel packages
 
 ---
 
