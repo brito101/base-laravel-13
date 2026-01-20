@@ -27,11 +27,16 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->method() == 'PUT') {
+            $passwordRules = 'nullable|min:8|max:100|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+        } else {
+            $passwordRules = 'required|min:8|max:100|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/';
+        }
 
         return [
             'name' => 'required|min:3|max:100',
             'email' => "required|min:6|max:100|unique:users,email,$this->id,id,deleted_at,NULL",
-            'password' => 'max:100',
+            'password' => $passwordRules,
             'photo' => 'image|mimes:jpg,png,jpeg,gif,svg,webp|max:4096|dimensions:max_width=4000,max_height=4000',
             'telephone' => 'nullable|min:8|max:25',
             'cell' => 'nullable|min:8|max:25',

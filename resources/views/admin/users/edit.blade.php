@@ -94,7 +94,9 @@
                                     <div class="col-12 col-md-6 form-group px-0 pl-md-2">
                                         <label for="password">Senha</label>
                                         <input type="password" class="form-control" id="password" placeholder="Senha"
-                                            minlength="8" name="password" value="">
+                                            minlength="8" maxlength="100" name="password" value=""
+                                            pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$"
+                                            title="A senha deve conter no mínimo 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial">
                                     </div>
                                 </div>
 
