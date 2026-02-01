@@ -200,7 +200,7 @@ return [
         Shetabit\Visitor\Provider\VisitorServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
+        Fruitcake\LaravelDebugbar\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
@@ -222,7 +222,7 @@ return [
         'Visitor' => Shetabit\Visitor\Facade\Visitor::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'Debugbar' => Fruitcake\LaravelDebugbar\Facades\Debugbar::class,
     ])->toArray(),
 
 ];
