@@ -3,8 +3,9 @@
 /*
  * This file is part of Laravel Minify.
  *
- * (c) Fahli Saputra <saputra@fahli.net>
- * (c) DulLah <dulah755@gmail.com>
+ * Laravel 13 compatible version by Rodrigo Brito <contato@rodrigobrito.dev.br>
+ * Original package by Fahli Saputra <saputra@fahli.net>
+ * Contributor: DulLah <dulah755@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +26,7 @@ return [
     | Default: true
     |
     */
-    'enabled' => env('MINFY_ENABLED', false),
+    'enabled' => env('MINIFY_ENABLED', false),
 
     /*
     |--------------------------------------------------------------------------
