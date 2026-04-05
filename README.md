@@ -5,7 +5,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> **Laravel 12 template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
+> **Laravel 13 template** for rapid development of robust administrative systems with focus on security, scalability and user experience.
 
 ## 📋 Table of Contents
 
@@ -22,7 +22,7 @@
 
 ## 🎯 About the Project
 
-This is a **Laravel 12 template** developed to accelerate the development of robust administrative systems. The project incorporates best practices in development, security and architecture, being ideal for projects that require:
+This is a **Laravel 13 template** developed to accelerate the development of robust administrative systems. The project incorporates best practices in development, security and architecture, being ideal for projects that require:
 
 - **Advanced authentication system** with 2FA
 - **Granular access control** (ACL)
@@ -62,7 +62,7 @@ This is a **Laravel 12 template** developed to accelerate the development of rob
 ## 🛠️ Tech Stack
 
 ### Backend
-- **Laravel 12** - PHP framework
+- **Laravel 13** - PHP framework
 - **PHP 8.2+** - Programming language
 - **MySQL 8** - Database
 - **Redis** - Cache and sessions
