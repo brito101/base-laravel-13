@@ -1,7 +1,7 @@
 # 🚀 Base Laravel - Professional Template
 
-[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-13.x-red.svg)](https://laravel.com)
+[![PHP](https://img.shields.io/badge/PHP-8.3+-blue.svg)](https://php.net)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -63,7 +63,7 @@ This is a **Laravel 13 template** developed to accelerate the development of rob
 
 ### Backend
 - **Laravel 13** - PHP framework
-- **PHP 8.2+** - Programming language
+- **PHP 8.3+** - Programming language
 - **MySQL 8** - Database
 - **Redis** - Cache and sessions
 - **Docker** - Containerization
