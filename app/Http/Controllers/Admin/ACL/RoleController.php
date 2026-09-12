@@ -11,8 +11,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Models\Permission;
+use App\Models\Role;
 
 class RoleController extends Controller
 {
@@ -81,7 +81,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id): View|Factory|Application|\Illuminate\Contracts\Foundation\Application
+    public function edit(string $id): View|Factory|Application|\Illuminate\Contracts\Foundation\Application
     {
         CheckPermission::checkAuth('Editar Perfis');
 
@@ -96,7 +96,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
         CheckPermission::checkAuth('Editar Perfis');
 
@@ -128,7 +128,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(string $id): RedirectResponse
     {
         CheckPermission::checkAuth('Excluir Perfis');
 
@@ -171,7 +171,7 @@ class RoleController extends Controller
         return view('admin.acl.roles.permissions', compact('role', 'permissions'));
     }
 
-    public function permissionsSync(Request $request, int $id): RedirectResponse
+    public function permissionsSync(Request $request, string $id): RedirectResponse
     {
 
         CheckPermission::checkAuth('Sincronizar Perfis');

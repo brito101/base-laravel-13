@@ -11,7 +11,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
+use App\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -80,7 +80,7 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id): View|Factory|Application|\Illuminate\Contracts\Foundation\Application
+    public function edit(string $id): View|Factory|Application|\Illuminate\Contracts\Foundation\Application
     {
         CheckPermission::checkAuth('Editar Permissões');
 
@@ -95,7 +95,7 @@ class PermissionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id): RedirectResponse
+    public function update(Request $request, string $id): RedirectResponse
     {
         CheckPermission::checkAuth('Editar Permissões');
 
@@ -127,7 +127,7 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id): RedirectResponse
+    public function destroy(string $id): RedirectResponse
     {
         CheckPermission::checkAuth('Excluir Permissões');
 

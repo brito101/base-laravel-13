@@ -22,14 +22,16 @@ class ModelHasRoleTableSeeder extends Seeder
         $programador = User::where('email', env('PROGRAMMER_EMAIL'))->first();
         $administrador = User::where('email', env('ADMIN_EMAIL'))->first();
 
+        $roles = DB::table('roles')->pluck('id', 'name');
+
         DB::table('model_has_roles')->insert([
             [
-                'role_id' => 1,
+                'role_id' => $roles['Programador'],
                 'model_type' => 'App\Models\User',
                 'model_id' => $programador->id,
             ],
             [
-                'role_id' => 2,
+                'role_id' => $roles['Administrador'],
                 'model_type' => 'App\Models\User',
                 'model_id' => $administrador->id,
             ],

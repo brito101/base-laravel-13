@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use DateTime;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Permission\PermissionRegistrar;
 
 class PermissionsTableSeeder extends Seeder
@@ -17,95 +18,35 @@ class PermissionsTableSeeder extends Seeder
     public function run()
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        DB::table('permissions')->insert([
-            /** ACL  1 to 11 */
-            [
-                'name' => 'Acessar ACL',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Listar Permissões',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Criar Permissões',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Editar Permissões',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Excluir Permissões',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Listar Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Criar Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Editar Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Excluir Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Sincronizar Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Atribuir Perfis',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
 
-            /** Users 12 to 17 */
-            [
-                'name' => 'Acessar Usuários',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Listar Usuários',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Criar Usuários',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Editar Usuário',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Editar Usuários',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-            [
-                'name' => 'Excluir Usuários',
-                'guard_name' => 'web',
-                'created_at' => new DateTime('now'),
-            ],
-        ]);
+        $permissions = [
+            /** ACL */
+            'Acessar ACL',
+            'Listar Permissões',
+            'Criar Permissões',
+            'Editar Permissões',
+            'Excluir Permissões',
+            'Listar Perfis',
+            'Criar Perfis',
+            'Editar Perfis',
+            'Excluir Perfis',
+            'Sincronizar Perfis',
+            'Atribuir Perfis',
+
+            /** Users */
+            'Acessar Usuários',
+            'Listar Usuários',
+            'Criar Usuários',
+            'Editar Usuário',
+            'Editar Usuários',
+            'Excluir Usuários',
+        ];
+
+        DB::table('permissions')->insert(array_map(fn ($name) => [
+            'id' => (string) Str::uuid(),
+            'name' => $name,
+            'guard_name' => 'web',
+            'created_at' => new DateTime('now'),
+        ], $permissions));
     }
 }

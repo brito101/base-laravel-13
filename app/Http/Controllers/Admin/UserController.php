@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller

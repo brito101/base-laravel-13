@@ -16,107 +16,49 @@ class RolesHasPermissionTableSeeder extends Seeder
     public function run()
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        DB::table('role_has_permissions')->insert([
-            /** ACL 1 to  11 */
-            [
-                'permission_id' => 1,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 2,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 3,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 4,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 5,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 6,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 7,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 8,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 9,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 10,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 11,
-                'role_id' => 1,
-            ],
-            /* A Profile assignment by administrator type user */
-            [
-                'permission_id' => 11,
-                'role_id' => 2,
-            ],
 
-            /** Users  de 12 to 17 (programmer and administrator) */
-            [
-                'permission_id' => 12,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 12,
-                'role_id' => 2,
-            ],
-            [
-                'permission_id' => 13,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 13,
-                'role_id' => 2,
-            ],
-            [
-                'permission_id' => 14,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 14,
-                'role_id' => 2,
-            ],
-            [
-                'permission_id' => 15,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 15,
-                'role_id' => 2,
-            ],
-            [
-                'permission_id' => 16,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 16,
-                'role_id' => 2,
-            ],
-            [
-                'permission_id' => 17,
-                'role_id' => 1,
-            ],
-            [
-                'permission_id' => 17,
-                'role_id' => 2,
-            ],
-        ]);
+        $roles = DB::table('roles')->pluck('id', 'name');
+        $permissions = DB::table('permissions')->pluck('id', 'name');
+
+        /** Permissões de ACL, exclusivas do Programador */
+        $aclPermissions = [
+            'Acessar ACL',
+            'Listar Permissões',
+            'Criar Permissões',
+            'Editar Permissões',
+            'Excluir Permissões',
+            'Listar Perfis',
+            'Criar Perfis',
+            'Editar Perfis',
+            'Excluir Perfis',
+            'Sincronizar Perfis',
+            'Atribuir Perfis',
+        ];
+
+        /** Permissões de Usuários, compartilhadas entre Programador e Administrador */
+        $userPermissions = [
+            'Acessar Usuários',
+            'Listar Usuários',
+            'Criar Usuários',
+            'Editar Usuário',
+            'Editar Usuários',
+            'Excluir Usuários',
+        ];
+
+        $rows = [];
+
+        foreach ($aclPermissions as $name) {
+            $rows[] = ['permission_id' => $permissions[$name], 'role_id' => $roles['Programador']];
+        }
+
+        /* Atribuição de Perfis também liberada para o Administrador */
+        $rows[] = ['permission_id' => $permissions['Atribuir Perfis'], 'role_id' => $roles['Administrador']];
+
+        foreach ($userPermissions as $name) {
+            $rows[] = ['permission_id' => $permissions[$name], 'role_id' => $roles['Programador']];
+            $rows[] = ['permission_id' => $permissions[$name], 'role_id' => $roles['Administrador']];
+        }
+
+        DB::table('role_has_permissions')->insert($rows);
     }
 }
