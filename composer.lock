@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91970ab6131c15691823fa8f26f9593c",
+    "content-hash": "d029223309292f005e3b8d92aad05b82",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
-            "version": "v3.2.0",
+            "version": "v4.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ColorlibHQ/AdminLTE.git",
-                "reference": "bd4d9c72931f1dd28601b6bfb387554a381ad540"
+                "reference": "a3702d79b95573eadef771f67065a9033cb4338b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/bd4d9c72931f1dd28601b6bfb387554a381ad540",
-                "reference": "bd4d9c72931f1dd28601b6bfb387554a381ad540",
+                "url": "https://api.github.com/repos/ColorlibHQ/AdminLTE/zipball/a3702d79b95573eadef771f67065a9033cb4338b",
+                "reference": "a3702d79b95573eadef771f67065a9033cb4338b",
                 "shasum": ""
             },
             "type": "library",
@@ -45,9 +45,19 @@
             ],
             "support": {
                 "issues": "https://github.com/ColorlibHQ/AdminLTE/issues",
-                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v3.2.0"
+                "source": "https://github.com/ColorlibHQ/AdminLTE/tree/v4.9.1"
             },
-            "time": "2022-02-07T20:33:09+00:00"
+            "funding": [
+                {
+                    "url": "https://www.paypal.me/daniel007in",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/danny007in",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-08-26T09:18:41+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1682,26 +1692,26 @@
         },
         {
             "name": "jeroennoten/laravel-adminlte",
-            "version": "v3.16.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeroennoten/Laravel-AdminLTE.git",
-                "reference": "dc92e92a9c8ac7443a82c97310e347ad62d971e4"
+                "reference": "c1290ac46b1454ff9c211132f184d7985fac3134"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/dc92e92a9c8ac7443a82c97310e347ad62d971e4",
-                "reference": "dc92e92a9c8ac7443a82c97310e347ad62d971e4",
+                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/c1290ac46b1454ff9c211132f184d7985fac3134",
+                "reference": "c1290ac46b1454ff9c211132f184d7985fac3134",
                 "shasum": ""
             },
             "require": {
-                "almasaeed2010/adminlte": "3.2.*",
-                "laravel/framework": ">=8.0",
-                "php": ">=7.3"
+                "almasaeed2010/adminlte": "^4.9",
+                "laravel/framework": "^12.0|^13.0",
+                "php": "^8.2"
             },
             "require-dev": {
-                "orchestra/testbench": ">=6.0",
-                "phpunit/phpunit": ">=9.1"
+                "orchestra/testbench": "^10.0|^11.0",
+                "phpunit/phpunit": "^11.0|^12.0"
             },
             "type": "library",
             "extra": {
@@ -1723,21 +1733,37 @@
             "authors": [
                 {
                     "name": "Jeroen Noten",
-                    "email": "jeroennoten@me.com"
+                    "email": "jeroennoten@me.com",
+                    "role": "Creator"
+                },
+                {
+                    "name": "Diego Smania",
+                    "email": "diego.smania@gmail.com",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Florian Ressel",
+                    "email": "florian@genxtreme.de",
+                    "role": "Maintainer"
                 }
             ],
-            "description": "Easy AdminLTE integration with Laravel",
+            "description": "Easy AdminLTE v4 integration with Laravel",
+            "homepage": "https://jeroennoten.github.io/Laravel-AdminLTE",
             "keywords": [
                 "AdminLTE",
                 "admin",
                 "administrator",
+                "blade",
+                "bootstrap5",
+                "dashboard",
                 "laravel"
             ],
             "support": {
+                "docs": "https://jeroennoten.github.io/Laravel-AdminLTE",
                 "issues": "https://github.com/jeroennoten/Laravel-AdminLTE/issues",
-                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.16.0"
+                "source": "https://github.com/jeroennoten/Laravel-AdminLTE"
             },
-            "time": "2026-04-30T07:28:25+00:00"
+            "time": "2026-09-03T13:43:19+00:00"
         },
         {
             "name": "laravel/framework",
@@ -2617,16 +2643,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.35.3",
+            "version": "3.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "5fc8404762179ae514678487b23494fd69b2309c"
+                "reference": "f7fb152932f30072d573510cbd4dd657d6475b25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/5fc8404762179ae514678487b23494fd69b2309c",
-                "reference": "5fc8404762179ae514678487b23494fd69b2309c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/f7fb152932f30072d573510cbd4dd657d6475b25",
+                "reference": "f7fb152932f30072d573510cbd4dd657d6475b25",
                 "shasum": ""
             },
             "require": {
@@ -2694,9 +2720,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.35.3"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.36.0"
             },
-            "time": "2026-08-22T12:55:54+00:00"
+            "time": "2026-09-02T08:00:27+00:00"
         },
         {
             "name": "league/flysystem-local",
@@ -3382,16 +3408,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "3.10.0",
+            "version": "3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "b321dd6749f0bf7189444158a3ce785cc16d69b0"
+                "reference": "147f303310f06334f03f409e49d7ad1e275ff05a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/b321dd6749f0bf7189444158a3ce785cc16d69b0",
-                "reference": "b321dd6749f0bf7189444158a3ce785cc16d69b0",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/147f303310f06334f03f409e49d7ad1e275ff05a",
+                "reference": "147f303310f06334f03f409e49d7ad1e275ff05a",
                 "shasum": ""
             },
             "require": {
@@ -3469,7 +3495,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/3.10.0"
+                "source": "https://github.com/Seldaek/monolog/tree/3.11.0"
             },
             "funding": [
                 {
@@ -3481,7 +3507,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-02T08:56:05+00:00"
+            "time": "2026-09-02T12:39:56+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -3892,16 +3918,16 @@
         },
         {
             "name": "openspout/openspout",
-            "version": "v5.11.0",
+            "version": "v5.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openspout/openspout.git",
-                "reference": "310bab7b5a29f23fc01774752613236c474bce2b"
+                "reference": "b87edb8617354be52b0b5addfccdba97c4fc6c5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openspout/openspout/zipball/310bab7b5a29f23fc01774752613236c474bce2b",
-                "reference": "310bab7b5a29f23fc01774752613236c474bce2b",
+                "url": "https://api.github.com/repos/openspout/openspout/zipball/b87edb8617354be52b0b5addfccdba97c4fc6c5e",
+                "reference": "b87edb8617354be52b0b5addfccdba97c4fc6c5e",
                 "shasum": ""
             },
             "require": {
@@ -3915,13 +3941,13 @@
             "require-dev": {
                 "ext-fileinfo": "*",
                 "ext-zlib": "*",
-                "friendsofphp/php-cs-fixer": "^3.95.20",
+                "friendsofphp/php-cs-fixer": "^3.95.24",
                 "infection/infection": "^0.35",
                 "phpbench/phpbench": "^1.7.0",
-                "phpstan/phpstan": "^2.2.8",
+                "phpstan/phpstan": "^2.2.12",
                 "phpstan/phpstan-phpunit": "^2.0.18",
                 "phpstan/phpstan-strict-rules": "^2.0.12",
-                "phpunit/phpunit": "^13.3.1"
+                "phpunit/phpunit": "^13.3.2"
             },
             "suggest": {
                 "ext-iconv": "To handle non UTF-8 CSV files (if \"php-mbstring\" is not already installed or is too limited)",
@@ -3969,7 +3995,7 @@
             ],
             "support": {
                 "issues": "https://github.com/openspout/openspout/issues",
-                "source": "https://github.com/openspout/openspout/tree/v5.11.0"
+                "source": "https://github.com/openspout/openspout/tree/v5.11.3"
             },
             "funding": [
                 {
@@ -3981,7 +4007,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-20T06:06:05+00:00"
+            "time": "2026-09-02T15:27:53+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",

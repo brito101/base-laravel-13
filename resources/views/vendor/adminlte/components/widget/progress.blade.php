@@ -1,20 +1,50 @@
+@if($isStacked())
+
+{{-- Bootstrap v5.3 stacked markup: every segment is a track of its own --}}
 <div {{ $attributes->merge(['class' => $makeProgressClass()]) }}>
 
+    {{-- Progress segments --}}
+    @foreach($segments as $segment)
+        <div class="{{ $makeSegmentClass() }}" style="{{ $makeSegmentStyle($segment) }}"
+            role="progressbar" aria-valuenow="{{ $segment['value'] }}" aria-valuemin="0"
+            aria-valuemax="100" aria-label="{{ $makeSegmentAriaLabel($segment) }}">
+
+            {{-- Segment bar --}}
+            <div class="{{ $makeSegmentBarClass($segment) }}"@if($isSegmentLabelAuto($segment)) data-progress-label="auto"@endif>
+
+                {{-- Segment label --}}
+                {{ $makeSegmentLabel($segment) }}
+
+            </div>
+
+        </div>
+    @endforeach
+
+</div>
+
+@else
+
+{{-- Bootstrap v5.3 markup: the aria attributes live on the .progress wrapper --}}
+<div {{ $attributes->merge([
+    'class' => $makeProgressClass(),
+    'role' => 'progressbar',
+    'aria-valuenow' => $value,
+    'aria-valuemin' => 0,
+    'aria-valuemax' => 100,
+    'aria-label' => __('adminlte::adminlte.progress'),
+]) }}>
+
     {{-- Progress bar --}}
-    <div class="{{ $makeProgressBarClass() }}" role="progressbar"
-        aria-valuenow="{{ $value }}" aria-valuemin="0" aria-valuemax="100"
-        style="{{ $makeProgressBarStyle() }}">
+    <div class="{{ $makeProgressBarClass() }}" style="{{ $makeProgressBarStyle() }}"@if(isset($withLabel) && ! isset($labelSlot)) data-progress-label="auto"@endif>
 
         {{-- Progress bar label --}}
-        @isset($withLabel)
-            {{ $value }}%
-        @else
-            <span class="sr-only">{{ $value }}% Progress</span>
-        @endisset
+        @isset($labelSlot){{ $labelSlot }}@elseif(isset($withLabel)){{ $value }}%@endisset
 
     </div>
 
 </div>
+
+@endif
 
 {{-- Register Javascript utility class for this component --}}
 
@@ -27,7 +57,7 @@
         /**
          * Constructor.
          *
-         * target: The id of the target progress bar.
+         * target: The id of the target progress element.
          */
         constructor(target)
         {
@@ -35,47 +65,79 @@
         }
 
         /**
-         * Get the current progress bar value.
+         * Get the underlying .progress element.
+         *
+         * index: The segment index, for a stacked progress bar.
          */
-        getValue()
+        getProgress(index = 0)
         {
-            // Check if target exists.
+            const t = document.getElementById(this.target);
 
-            let t = $(`#${this.target}`);
-
-            if (t.length <= 0) {
-                return;
+            if (! t) {
+                return null;
             }
 
-            // Return the progress bar current value (casted to number).
-
-            return +(t.find('.progress-bar').attr('aria-valuenow'));
+            return t.classList.contains('progress')
+                ? t
+                : t.querySelectorAll('.progress')[index] ?? null;
         }
 
         /**
-         * Set the new progress bar value.
+         * Get the current progress value.
+         *
+         * index: The segment index, for a stacked progress bar.
          */
-        setValue(value)
+        getValue(index = 0)
         {
-            // Check if target exists.
+            const p = this.getProgress(index);
 
-            let t = $(`#${this.target}`);
-
-            if (t.length <= 0) {
+            if (! p) {
                 return;
             }
 
-            // Update progress bar.
+            return +(p.getAttribute('aria-valuenow'));
+        }
 
-            value = +value;
+        /**
+         * Update the current progress value.
+         *
+         * value: The new percentage value (between 0 and 100).
+         * index: The segment index, for a stacked progress bar.
+         */
+        setValue(value, index = 0)
+        {
+            const p = this.getProgress(index);
 
-            t.find('.progress-bar').css('width', value + '%')
-                .attr('aria-valuenow', value);
+            if (! p) {
+                return;
+            }
 
-            if (t.find('span.sr-only').length > 0) {
-                t.find('span.sr-only').text(value + '% Progress');
+            value = Math.max(Math.min(+value, 100), 0);
+            const bar = p.querySelector('.progress-bar');
+
+            p.setAttribute('aria-valuenow', value);
+
+            if (! bar) {
+                return;
+            }
+
+            // On the Bootstrap stacked markup the percentage lives on the
+            // track, the inner bar always fills it.
+
+            if (p.parentElement?.classList.contains('progress-stacked')) {
+                p.style.width = value + '%';
+            } else if (p.classList.contains('vertical')) {
+                bar.style.height = value + '%';
             } else {
-                t.find('.progress-bar').text(value + '%');
+                bar.style.width = value + '%';
+            }
+
+            // Refresh the label when the progress bar is showing the built-in
+            // percentage one. A label provided through the 'labelSlot' is
+            // owned by the application and is left untouched.
+
+            if (bar.dataset.progressLabel === 'auto') {
+                bar.textContent = value + '%';
             }
         }
     }

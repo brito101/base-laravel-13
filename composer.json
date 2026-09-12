@@ -17,7 +17,7 @@
         "eusonlito/laravel-meta": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
-        "jeroennoten/laravel-adminlte": "^3.9",
+        "jeroennoten/laravel-adminlte": "^4.0",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.27",

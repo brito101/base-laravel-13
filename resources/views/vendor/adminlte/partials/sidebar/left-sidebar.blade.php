@@ -1,34 +1,51 @@
-<aside class="main-sidebar {{ config('adminlte.classes_sidebar', 'sidebar-dark-primary elevation-4') }}">
+@inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
+@inject('sidebarItemHelper', 'JeroenNoten\LaravelAdminLte\Helpers\SidebarItemHelper')
+
+@php
+    // The HTML id of the sidebar menu. The sidebar search box targets it.
+    $sidebarMenuId = 'adminlte-sidebar-menu';
+
+    // In AdminLTE v4, the search box lives outside of the scrollable menu
+    // wrapper. So, we split the search items from the regular menu items.
+    $sidebarMenu = $adminlte->menu('sidebar');
+
+    $sidebarSearchItems = array_filter($sidebarMenu, function ($item) use ($sidebarItemHelper) {
+        return $sidebarItemHelper->isSearch($item);
+    });
+
+    $sidebarMenuItems = array_filter($sidebarMenu, function ($item) use ($sidebarItemHelper) {
+        return ! $sidebarItemHelper->isSearch($item);
+    });
+@endphp
+
+<aside class="{{ $layoutHelper->makeSidebarWrapperClasses() }}" {!! $layoutHelper->makeSidebarData() !!}>
 
     {{-- Sidebar brand logo --}}
-    @if (config('adminlte.logo_img_xl'))
+    @if(config('adminlte.logo_img_xl'))
         @include('adminlte::partials.common.brand-logo-xl')
     @else
         @include('adminlte::partials.common.brand-logo-xs')
     @endif
 
+    {{-- Sidebar search box (kept outside of the sidebar wrapper) --}}
+    @foreach($sidebarSearchItems as $item)
+        @include('adminlte::partials.sidebar.menu-item')
+    @endforeach
+
     {{-- Sidebar menu --}}
-    <div class="sidebar">
-
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{ Auth::user()->photo ? url('storage/users/' . Auth::user()->photo) : asset('vendor/adminlte/dist/img/avatar.png') }}"
-                    class="img-circle elevation-2" style="width: 33.6px; height: 33.6px; object-fit: cover;"
-                    alt="{{ Auth::user()->name }}">
-            </div>
-            <div class="info">
-                <a href="{{ Auth::user()->hasPermissionTo('Editar Usuários') ? route('admin.users.edit', ['user' => Auth::user()->id]) : (Auth::user()->hasPermissionTo('Editar Usuário') ? route('admin.user.edit') : '#') }}"
-                    class="d-block" title="Editar usuário">{{ Str::words(Auth::user()->name, 1, '') }}</a>
-            </div>
-        </div>
-
-        <nav class="pt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column {{ config('adminlte.classes_sidebar_nav', '') }}"
-                data-widget="treeview" role="menu"
-                @if (config('adminlte.sidebar_nav_animation_speed') != 300) data-animation-speed="{{ config('adminlte.sidebar_nav_animation_speed') }}" @endif
-                @if (!config('adminlte.sidebar_nav_accordion')) data-accordion="false" @endif>
+    <div class="sidebar-wrapper">
+        {{-- The 'navigation' id is the target of the skip link. Without it the
+             AdminLTE accessibility script falls back to the first nav element
+             of the document, which is the header toolbar. --}}
+        <nav id="navigation"
+            aria-label="{{ config('adminlte.sidebar_nav_aria_label') ?: __('adminlte::adminlte.main_navigation') }}"
+            class="mt-2">
+            <ul class="{{ $layoutHelper->makeSidebarNavClasses() }}"
+                id="{{ $sidebarMenuId }}"
+                data-lte-toggle="treeview"
+                {!! $layoutHelper->makeSidebarNavData() !!}>
                 {{-- Configured sidebar links --}}
-                @each('adminlte::partials.sidebar.menu-item', $adminlte->menu('sidebar'), 'item')
+                @each('adminlte::partials.sidebar.menu-item', $sidebarMenuItems, 'item')
             </ul>
         </nav>
     </div>

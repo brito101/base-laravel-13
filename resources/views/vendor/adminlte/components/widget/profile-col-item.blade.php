@@ -4,28 +4,33 @@
 
         {{-- Icon --}}
         @isset($icon)
-            <i class="{{ $icon }}"></i>
+            <i class="{{ $icon }}" aria-hidden="true"></i>
         @endisset
 
         {{-- Header --}}
         @isset($title)
-            <h5 class="description-header">
-                @if(! empty($url))
+            <p class="description-header">
+                @if(! empty($url) && $urlTarget === 'title')
                     <a href="{{ $url }}">{{ $title }}</a>
                 @else
                     {{ $title }}
                 @endif
-            </h5>
+            </p>
         @endisset
 
         {{-- Text --}}
-        @isset($text)
-            <p class="description-text">
-                <span class="{{ $makeTextWrapperClass() }}">
-                    {{ $text }}
+        @if(isset($textSlot) || isset($text))
+            <span class="description-text">
+                <span class="{{ $makeTextWrapperClass() }}"
+                    @isset($textTooltip) title="{{ $textTooltip }}" style="cursor:help;" @endisset>
+                    @if(! empty($url) && $urlTarget === 'text')
+                        <a href="{{ $url }}">{{ $textSlot ?? $text }}</a>
+                    @else
+                        {{ $textSlot ?? $text }}
+                    @endif
                 </span>
-            </p>
-        @endisset
+            </span>
+        @endif
 
     </div>
 

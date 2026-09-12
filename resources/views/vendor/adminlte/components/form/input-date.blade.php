@@ -1,10 +1,17 @@
 @extends('adminlte::components.form.input-group-component')
 
+{{-- Set errors bag internallly --}}
+
+@php($setErrorsBag($errors ?? null))
+
+{{-- Set input group item section --}}
+
 @section('input_group_item')
 
     {{-- Input Date --}}
-    <input id="{{ $id }}" name="{{ $name }}" data-target="#{{ $id }}" data-toggle="datetimepicker"
-        {{ $attributes->merge(['class' => $makeItemClass()]) }}>
+    <input id="{{ $id }}" name="{{ $name }}"
+        value="{{ $getOldValue($errorKey, $attributes->get('value')) }}"
+        {{ $attributes->except('value')->merge($makeItemAttributes()) }}>
 
 @overwrite
 
@@ -13,16 +20,18 @@
 @push('js')
 <script>
 
-    $(() => {
-        let usrCfg = _AdminLTE_InputDate.parseCfg( @json($config) );
-        $('#{{ $id }}').datetimepicker(usrCfg);
+    window._AdminLTE_Ready(function () {
 
-        // Add support to auto display the old submitted value or values in case
-        // of validation errors.
+        const el = document.getElementById(@json($id));
 
-        let value = @json($getOldValue($errorKey, $attributes->get('value')));
-        $('#{{ $id }}').val(value || "");
-    })
+        if (! el || typeof window.flatpickr === 'undefined') {
+            return;
+        }
+
+        const usrCfg = _AdminLTE_InputDate.parseCfg( @json((object) $makePluginConfig()) );
+
+        el._flatpickr_instance = window.flatpickr(el, usrCfg);
+    });
 
 </script>
 @endpush
@@ -38,7 +47,7 @@
         /**
          * Parse the php plugin configuration and eval the javascript code.
          *
-         * cfg: A json with the php side configuration.
+         * cfg: An object with the php side configuration.
          */
         static parseCfg(cfg)
         {
@@ -47,7 +56,7 @@
 
                 if (typeof v === 'string' && v.startsWith('js:')) {
                     cfg[prop] = eval(v.slice(3));
-                } else if (typeof v === 'object') {
+                } else if (v !== null && typeof v === 'object') {
                     cfg[prop] = _AdminLTE_InputDate.parseCfg(v);
                 }
             }

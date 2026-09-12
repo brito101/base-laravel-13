@@ -29,7 +29,7 @@ class PermissionController extends Controller
             return DataTables::of($permissions)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) use ($token) {
-                    return '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="permission/'.$row->id.'/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>'.'<form method="POST" action="permission/'.$row->id.'" class="btn btn-xs px-0"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="'.$token.'"><button class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" onclick="return confirm(\'Confirma a exclusão desta permissão?\')"><i class="fa fa-lg fa-fw fa-trash"></i></button></form>';
+                    return '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="permission/'.$row->id.'/edit"><i class="bi bi-pen"></i></a>'.'<form method="POST" action="permission/'.$row->id.'" class="d-inline"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="'.$token.'"><button class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" onclick="return confirm(\'Confirma a exclusão desta permissão?\')"><i class="bi bi-trash"></i></button></form>';
                 })
                 ->rawColumns(['action'])
                 ->make();

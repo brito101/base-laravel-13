@@ -1,36 +1,40 @@
-@extends('adminlte::auth.auth-page', ['auth_type' => 'login'])
-@section('title', '- Reset')
+@extends('adminlte::auth.auth-page', ['authType' => 'login'])
 
-@php($password_email_url = View::getSection('password_email_url') ?? config('adminlte.password_email_url', 'password/email'))
+@inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
 
-@if (config('adminlte.use_route_url', false))
-    @php($password_email_url = $password_email_url ? route($password_email_url) : '')
-@else
-    @php($password_email_url = $password_email_url ? url($password_email_url) : '')
-@endif
+@php
+    $passEmailUrl = View::getSection('password_email_url') ?? config('adminlte.password_email_url', 'password/email');
+    $loginUrl = View::getSection('login_url') ?? config('adminlte.login_url', 'login');
+    $registerUrl = View::getSection('register_url') ?? config('adminlte.register_url', 'register');
+
+    $passEmailUrl = $layoutHelper->makeUrl($passEmailUrl);
+    $loginUrl = $layoutHelper->makeUrl($loginUrl);
+    $registerUrl = $layoutHelper->makeUrl($registerUrl);
+@endphp
 
 @section('auth_header', __('adminlte::adminlte.password_reset_message'))
 
 @section('auth_body')
 
-    @if (session('status'))
-        <div class="alert alert-success">
+    @if(session('status'))
+        <div class="alert alert-success" role="alert">
             {{ session('status') }}
         </div>
     @endif
 
-    <form action="{{ $password_email_url }}" method="post">
+    <form action="{{ $passEmailUrl }}" method="post">
         @csrf
 
         {{-- Email field --}}
+        <label for="email" class="visually-hidden">{{ __('adminlte::adminlte.email') }}</label>
+
         <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+            <input type="email" name="email" id="email"
+                class="form-control @error('email') is-invalid @enderror"
                 value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
+            <div class="input-group-text">
+                <span class="bi bi-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
             </div>
 
             @error('email')
@@ -41,11 +45,33 @@
         </div>
 
         {{-- Send reset link button --}}
-        <button type="submit" class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
-            <span class="fas fa-share-square"></span>
-            {{ __('adminlte::adminlte.send_password_reset_link') }}
-        </button>
-
+        <div class="d-grid">
+            <button type="submit" class="btn {{ config('adminlte.classes_auth_btn', 'btn-primary') }}">
+                <i class="bi bi-send me-1"></i>
+                {{ __('adminlte::adminlte.send_password_reset_link') }}
+            </button>
+        </div>
     </form>
 
+@stop
+
+@section('auth_footer')
+    {{-- Login link. Without it the page is a dead end, the reference layout
+         provides the same way back. --}}
+    @if($loginUrl)
+        <p class="my-0">
+            <a href="{{ $loginUrl }}">
+                {{ __('adminlte::adminlte.i_already_have_a_membership') }}
+            </a>
+        </p>
+    @endif
+
+    {{-- Register link --}}
+    @if($registerUrl)
+        <p class="my-0">
+            <a href="{{ $registerUrl }}">
+                {{ __('adminlte::adminlte.register_a_new_membership') }}
+            </a>
+        </p>
+    @endif
 @stop

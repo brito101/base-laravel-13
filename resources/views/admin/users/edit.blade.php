@@ -1,30 +1,33 @@
 @extends('adminlte::page')
 
 @section('title', '- Editar Usuário')
-@section('plugins.select2', true)
+
+@section('plugins.jQuery', true)
+@section('plugins.Select2', true)
 @section('plugins.BsCustomFileInput', true)
-@section('plugins.BootstrapSwitch', true)
 
 @section('content')
 
-    <section class="content-header">
+    <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1><i class="fas fa-fw fa-user"></i> Editar Usuário</h1>
+                    <h1 class="mb-0 fs-3"><i class="bi bi-person me-2"></i>Editar Usuário</h1>
                 </div>
                 <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
-                        @can('Listar Usuários')
-                            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Usuários</a></li>
-                        @endcan
-                        <li class="breadcrumb-item active">Editar Usuário</li>
-                    </ol>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb float-sm-end">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.home') }}">Home</a></li>
+                            @can('Listar Usuários')
+                                <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">Usuários</a></li>
+                            @endcan
+                            <li class="breadcrumb-item active">Editar Usuário</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <section class="content">
         <div class="container-fluid">
@@ -33,7 +36,7 @@
 
                     @include('components.alert')
 
-                    <div class="card">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Dados Cadastrais do Usuário</h3>
                         </div>
@@ -44,30 +47,30 @@
                             @csrf
                             <input type="hidden" name="id" value="{{ $user->id }}">
                             <div class="card-body">
-                                <div class="d-flex flex-wrap justify-content-between">
+                                <div class="d-flex flex-wrap justify-content-between mb-3">
                                     <div class="col-12 form-group px-0">
-                                        <label for="name">Nome</label>
+                                        <label class="form-label"for="name">Nome</label>
                                         <input type="text" class="form-control" id="name"
                                             placeholder="Nome Completo" name="name"
                                             value="{{ old('name') ?? $user->name }}" required>
                                     </div>
                                 </div>
 
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="telephone">Telefone</label>
+                                <div class="d-flex flex-wrap justify-content-between mb-3">
+                                    <div class="col-12 col-md-6 form-group px-0 pe-md-2">
+                                        <label class="form-label"for="telephone">Telefone</label>
                                         <input type="tel" class="form-control" id="telephone" placeholder="Telefone"
                                             name="telephone" value="{{ old('telephone') ?? $user->telephone }}">
                                     </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="cell">Celular</label>
+                                    <div class="col-12 col-md-6 form-group px-0 ps-md-2">
+                                        <label class="form-label"for="cell">Celular</label>
                                         <input type="tel" class="form-control" id="cell" placeholder="Celular"
                                             name="cell" value="{{ old('cell') ?? $user->cell }}">
                                     </div>
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2 d-flex flex-wrap">
+                                    <div class="col-12 col-md-6 form-group px-0 pe-md-2 d-flex flex-wrap">
 
                                         <div class="{{ $user->photo != null ? 'col-md-9' : 'col-md-12' }} px-0">
                                             <x-adminlte-input-file name="photo" label="Foto"
@@ -85,14 +88,14 @@
                                     </div>
                                 </div>
 
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                        <label for="email">E-mail</label>
+                                <div class="d-flex flex-wrap justify-content-between mb-3">
+                                    <div class="col-12 col-md-6 form-group px-0 pe-md-2">
+                                        <label class="form-label"for="email">E-mail</label>
                                         <input type="email" class="form-control" id="email" placeholder="E-mail"
                                             name="email" value="{{ old('email') ?? $user->email }}" required>
                                     </div>
-                                    <div class="col-12 col-md-6 form-group px-0 pl-md-2">
-                                        <label for="password">Senha</label>
+                                    <div class="col-12 col-md-6 form-group px-0 ps-md-2">
+                                        <label class="form-label"for="password">Senha</label>
                                         <input type="password" class="form-control" id="password" placeholder="Senha"
                                             minlength="8" maxlength="100" name="password" value=""
                                             pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$"
@@ -101,22 +104,14 @@
                                 </div>
 
                                 <div
-                                    class="col-12 col-md-6 form-group px-0 {{ Auth::user()->hasPermissionTo('Atribuir Perfis') ? 'pr-md-2' : 'pl-md-2' }} d-flex flex-wrap justify-content-start">
-                                    @if ($user->google2fa_secret_enabled)
-                                        <x-adminlte-input-switch name="google2fa_secret_enabled"
-                                            label="Duplo Fator de Autenticação (Google Auth)" data-on-text="Sim"
-                                            data-off-text="Não" data-on-color="teal" checked id="google2fa"
-                                            data-action="{{ route('admin.user.google2fa') }}"
-                                            data-user="{{ $user->id }}" />
-                                    @else
-                                        <x-adminlte-input-switch name="google2fa_secret_enabled"
-                                            label="Duplo Fator de Autenticação (Google Auth)" data-on-text="Sim"
-                                            data-off-text="Não" data-on-color="teal" id="google2fa"
-                                            data-action="{{ route('admin.user.google2fa') }}"
-                                            data-user="{{ $user->id }}" />
-                                    @endif
+                                    class="col-12 col-md-6 form-group px-0 ps-md-2 d-flex flex-wrap justify-content-start">
+                                    <x-adminlte-input-switch name="google2fa_secret_enabled" id="google2fa"
+                                        label="Duplo Fator de Autenticação (Google Auth)"
+                                        :config="['onColor' => 'primary', 'state' => (bool) $user->google2fa_secret_enabled]"
+                                        data-action="{{ route('admin.user.google2fa') }}"
+                                        data-user="{{ $user->id }}" />
 
-                                    <div class="col-12 px-0" id="seed-container">
+                                    <div class="col-12 px-0 mb-3" id="seed-container">
                                         <div>
                                             @if (
                                                 ($user->google2fa_secret_enabled && Auth::user()->id == $user->id) ||
@@ -134,8 +129,8 @@
 
                                 <div class="d-flex flex-wrap justify-content-between">
                                     @can('Atribuir Perfis')
-                                        <div class="col-12 col-md-6 form-group px-0 pr-md-2">
-                                            <label for="role">Tipo de Usuário</label>
+                                        <div class="col-12 col-md-6 form-group px-0 pe-md-2">
+                                            <label class="form-label"for="role">Tipo de Usuário</label>
                                             <x-adminlte-select2 name="role">
                                                 @foreach ($roles as $role)
                                                     <option
@@ -151,16 +146,11 @@
                                 @can('Atribuir Perfis')
                                     @if ($user->id != Auth::user()->id)
                                         <div
-                                            class="col-12 col-md-6 form-group px-0 pl-md-2 d-flex flex-wrap justify-content-start">
-                                            @if ($user->first_access)
-                                                <x-adminlte-input-switch name="first_access" label="Primeiro Acesso"
-                                                    data-on-text="Sim" data-off-text="Não" data-on-color="teal" checked
-                                                    id="first_access" />
-                                            @else
-                                                <x-adminlte-input-switch name="first_access" label="Primeiro Acesso"
-                                                    data-on-text="Sim" data-off-text="Não" data-on-color="teal"
-                                                    id="first_access" />
-                                            @endif
+                                            class="col-12 col-md-6 form-group px-0 ps-md-2 d-flex flex-wrap justify-content-start">
+                                            <x-adminlte-input-switch name="first_access" id="first_access"
+                                                label="Primeiro Acesso"
+                                                :config="['onColor' => 'primary', 'state' => (bool) $user->first_access]"
+                                                enable-old-support />
                                         </div>
                                     @endif
                                 @endcan
@@ -179,7 +169,7 @@
     </section>
 @endsection
 
-@section('custom_js')
+@push('js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
     @vite(['resources/js/phone.js', 'resources/js/google2fa.js'])
-@endsection
+@endpush

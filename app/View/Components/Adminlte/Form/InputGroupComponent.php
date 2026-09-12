@@ -1,0 +1,317 @@
+<?php
+
+namespace App\View\Components\Adminlte\Form;
+
+use Illuminate\View\Component;
+use JeroenNoten\LaravelAdminLte\Helpers\UtilsHelper;
+
+class InputGroupComponent extends Component
+{
+    /**
+     * Holds an instance of the Laravel errors bag. This will be mainly used to
+     * detect when the input group has associated errors.
+     *
+     * @var \Illuminate\Support\MessageBag;
+     */
+    protected $errorsBag;
+
+    /**
+     * The class added to the "input-group" element when the input group has
+     * associated errors. Each component styles its own invalid state, so the
+     * class is expected to be paired with the rules pushed by its view.
+     *
+     * @var string
+     */
+    protected $invalidGroupClass = 'adminlte-invalid-igroup';
+
+    /**
+     * The base set of classes for the input group item. It provides a way for
+     * the concrete components to setup the style of their underlying control.
+     *
+     * @var array
+     */
+    protected $itemBaseClass = ['form-control'];
+
+    /**
+     * The id attribute for the underlying input group item. The input group
+     * item may be an "input", a "select", a "textarea", etc.
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
+     * The name attribute for the underlying input group item. This value will
+     * be also used as the default id attribute when no other is provided. The
+     * input group item may be an "input", a "select", a "textarea", etc.
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * The label of the input group.
+     *
+     * @var string
+     */
+    public $label;
+
+    /**
+     * The input group size (you can specify 'sm' or 'lg').
+     *
+     * @var string
+     */
+    public $size;
+
+    /**
+     * Additional classes for the "input-group" element. This provides a way to
+     * customize the input group container style.
+     *
+     * @var string
+     */
+    public $igroupClass;
+
+    /**
+     * Extra classes for the label container. This provides a way to customize
+     * the label style.
+     *
+     * @var string
+     */
+    public $labelClass;
+
+    /**
+     * Extra classes for the "form-group" element. This provides a way to
+     * customize the main container style.
+     *
+     * @var string
+     */
+    public $fgroupClass;
+
+    /**
+     * Indicates if the invalid feedback is disabled for the input group.
+     *
+     * @var bool
+     */
+    public $disableFeedback;
+
+    /**
+     * The lookup key to use when searching for validation errors. The lookup
+     * key is automatically generated from the name property. This provides a
+     * way to overwrite that value.
+     *
+     * @var string
+     */
+    public $errorKey;
+
+    /**
+     * Create a new component instance.
+     *
+     * @return void
+     */
+    public function __construct(
+        $name, $id = null, $label = null, $igroupSize = null, $labelClass = null,
+        $fgroupClass = null, $igroupClass = null, $disableFeedback = null,
+        $errorKey = null
+    ) {
+        $this->id = $id ?? $name;
+        $this->name = $name;
+        $this->label = UtilsHelper::applyHtmlEntityDecoder($label);
+        $this->size = $igroupSize;
+        $this->fgroupClass = $fgroupClass;
+        $this->labelClass = $labelClass;
+        $this->igroupClass = $igroupClass;
+        $this->disableFeedback = $disableFeedback;
+
+        // Setup the lookup key for validation errors.
+
+        $this->errorKey = $errorKey ?? $this->makeErrorKey();
+
+        // Initialize the internal errors bag holder variable.
+
+        $this->errorsBag = null;
+    }
+
+    /**
+     * Make the class attribute for the form group element. Note that Bootstrap
+     * 5 dropped the "form-group" class in favour of the spacing utilities, so
+     * we use the "mb-3" utility as the AdminLTE v4 form pages do.
+     *
+     * @return string
+     */
+    public function makeFormGroupClass()
+    {
+        $classes = [];
+
+        if (isset($this->fgroupClass) && is_scalar($this->fgroupClass)) {
+            $classes[] = (string) $this->fgroupClass;
+        }
+
+        // Add the default bottom margin, unless the caller already provides a
+        // margin utility. Note the Bootstrap spacing utilities are declared
+        // with '!important' and the same specificity, so the winner is decided
+        // by the order of the stylesheet and not by the order of the classes.
+
+        if (! UtilsHelper::hasBottomMarginClass(implode(' ', $classes))) {
+            array_unshift($classes, 'mb-3');
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     * Make the class attribute for the label element. Bootstrap 5 requires the
+     * "form-label" class on the labels of the form controls.
+     *
+     * @return string
+     */
+    public function makeLabelClass()
+    {
+        $classes = ['form-label'];
+
+        if (isset($this->labelClass)) {
+            $classes[] = $this->labelClass;
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     * Make the class attribute for the "input-group" element.
+     *
+     * @return string
+     */
+    public function makeInputGroupClass()
+    {
+        $classes = ['input-group'];
+
+        if (isset($this->size) && in_array($this->size, ['sm', 'lg'])) {
+            $classes[] = "input-group-{$this->size}";
+        }
+
+        if ($this->isInvalid()) {
+            $classes[] = $this->invalidGroupClass;
+        }
+
+        if (isset($this->igroupClass)) {
+            $classes[] = $this->igroupClass;
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     * Make the class attribute for the input group item.
+     *
+     * @return string
+     */
+    public function makeItemClass()
+    {
+        $classes = (array) $this->itemBaseClass;
+
+        if ($this->isInvalid()) {
+            $classes[] = 'is-invalid';
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     * Makes the set of default attributes of the input group item. The
+     * validation state is wired to the feedback block, so a screen reader
+     * announces the error together with the control.
+     *
+     * @param  array  $extra  Additional default attributes
+     * @return array
+     */
+    public function makeItemAttributes($extra = [])
+    {
+        $attrs = array_merge(['class' => $this->makeItemClass()], (array) $extra);
+
+        if ($this->isInvalid()) {
+            $attrs['aria-invalid'] = 'true';
+            $attrs['aria-describedby'] = $this->makeInvalidFeedbackId();
+        }
+
+        return $attrs;
+    }
+
+    /**
+     * Make the id attribute for the invalid feedback block.
+     *
+     * @return string
+     */
+    public function makeInvalidFeedbackId()
+    {
+        return "{$this->id}-error";
+    }
+
+    /**
+     * Make the class attribute for the invalid feedback block.
+     *
+     * @return string
+     */
+    public function makeInvalidFeedbackClass()
+    {
+        return 'invalid-feedback d-block';
+    }
+
+    /**
+     * Check if there are validation errors in the session related to the
+     * error key.
+     *
+     * @return bool
+     */
+    public function isInvalid()
+    {
+        // Get the errors bag from session. The errors bag will be an instance
+        // of the Illuminate\Support\MessageBag class. First we will check if
+        // the errors bag is available within this instance, otherwise we will
+        // try to get it from the session.
+
+        $errors = $this->errorsBag ?? session()->get('errors');
+
+        // Check if the invalid feedback is enabled and there exists an error
+        // related to the configured error key.
+
+        return ! isset($this->disableFeedback)
+            && ! empty($errors)
+            && $errors->has($this->errorKey);
+    }
+
+    /**
+     * Setup the errors bag internally.
+     *
+     * @param  \Illuminate\Support\MessageBag  $errorsBag
+     * @return void
+     */
+    public function setErrorsBag($errorsBag)
+    {
+        $this->errorsBag = $errorsBag;
+    }
+
+    /**
+     * Make the error key that will be used to search for validation errors.
+     * The error key is generated from the 'name' property.
+     * Examples:
+     * $name = 'files[]'         => $errorKey = 'files'.
+     * $name = 'person[2][name]' => $errorKey = 'person.2.name'.
+     *
+     * @return string
+     */
+    protected function makeErrorKey()
+    {
+        $errKey = preg_replace('@\[\]$@', '', $this->name);
+
+        return preg_replace('@\[([^]]+)\]@', '.$1', $errKey);
+    }
+
+    /**
+     * Get the view / contents that represent the component.
+     *
+     * @return \Illuminate\View\View|string
+     */
+    public function render()
+    {
+        return view('adminlte::components.form.input-group-component');
+    }
+}

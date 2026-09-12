@@ -29,7 +29,3 @@
         </div>
     </div>
 @endsection
-
-@section('custom_js')
-    <script src="{{ asset('js/snow.js') }}"></script>
-@endsection

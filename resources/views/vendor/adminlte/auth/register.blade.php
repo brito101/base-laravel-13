@@ -1,32 +1,31 @@
-@extends('adminlte::auth.auth-page', ['auth_type' => 'register'])
-@section('title', '- Conta')
+@extends('adminlte::auth.auth-page', ['authType' => 'register'])
 
-@php($login_url = View::getSection('login_url') ?? config('adminlte.login_url', 'login'))
-@php($register_url = View::getSection('register_url') ?? config('adminlte.register_url', 'register'))
+@inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
 
-@if (config('adminlte.use_route_url', false))
-    @php($login_url = $login_url ? route($login_url) : '')
-    @php($register_url = $register_url ? route($register_url) : '')
-@else
-    @php($login_url = $login_url ? url($login_url) : '')
-    @php($register_url = $register_url ? url($register_url) : '')
-@endif
+@php
+    $loginUrl = View::getSection('login_url') ?? config('adminlte.login_url', 'login');
+    $registerUrl = View::getSection('register_url') ?? config('adminlte.register_url', 'register');
+
+    $loginUrl = $layoutHelper->makeUrl($loginUrl);
+    $registerUrl = $layoutHelper->makeUrl($registerUrl);
+@endphp
 
 @section('auth_header', __('adminlte::adminlte.register_message'))
 
 @section('auth_body')
-    <form action="{{ $register_url }}" method="post">
+    <form action="{{ $registerUrl }}" method="post">
         @csrf
 
         {{-- Name field --}}
+        <label for="name" class="visually-hidden">{{ __('adminlte::adminlte.full_name') }}</label>
+
         <div class="input-group mb-3">
-            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+            <input type="text" name="name" id="name"
+                class="form-control @error('name') is-invalid @enderror"
                 value="{{ old('name') }}" placeholder="{{ __('adminlte::adminlte.full_name') }}" autofocus>
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-user {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
+            <div class="input-group-text">
+                <span class="bi bi-person-fill {{ config('adminlte.classes_auth_icon', '') }}"></span>
             </div>
 
             @error('name')
@@ -37,14 +36,15 @@
         </div>
 
         {{-- Email field --}}
+        <label for="email" class="visually-hidden">{{ __('adminlte::adminlte.email') }}</label>
+
         <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+            <input type="email" name="email" id="email"
+                class="form-control @error('email') is-invalid @enderror"
                 value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}">
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
+            <div class="input-group-text">
+                <span class="bi bi-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
             </div>
 
             @error('email')
@@ -55,14 +55,15 @@
         </div>
 
         {{-- Password field --}}
+        <label for="password" class="visually-hidden">{{ __('adminlte::adminlte.password') }}</label>
+
         <div class="input-group mb-3">
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
+            <input type="password" name="password" id="password"
+                class="form-control @error('password') is-invalid @enderror"
                 placeholder="{{ __('adminlte::adminlte.password') }}">
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
+            <div class="input-group-text">
+                <span class="bi bi-lock-fill {{ config('adminlte.classes_auth_icon', '') }}"></span>
             </div>
 
             @error('password')
@@ -73,15 +74,17 @@
         </div>
 
         {{-- Confirm password field --}}
+        <label for="password_confirmation" class="visually-hidden">
+            {{ __('adminlte::adminlte.retype_password') }}
+        </label>
+
         <div class="input-group mb-3">
-            <input type="password" name="password_confirmation"
+            <input type="password" name="password_confirmation" id="password_confirmation"
                 class="form-control @error('password_confirmation') is-invalid @enderror"
                 placeholder="{{ __('adminlte::adminlte.retype_password') }}">
 
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                </div>
+            <div class="input-group-text">
+                <span class="bi bi-lock-fill {{ config('adminlte.classes_auth_icon', '') }}"></span>
             </div>
 
             @error('password_confirmation')
@@ -92,17 +95,19 @@
         </div>
 
         {{-- Register button --}}
-        <button type="submit" class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
-            <span class="fas fa-user-plus"></span>
-            {{ __('adminlte::adminlte.register') }}
-        </button>
-
+        <div class="d-grid">
+            <button type="submit" class="btn {{ config('adminlte.classes_auth_btn', 'btn-primary') }}">
+                <i class="bi bi-person-plus me-1"></i>
+                {{ __('adminlte::adminlte.register') }}
+            </button>
+        </div>
     </form>
+@include('adminlte::auth.social-links', ['fallbackText' => __('adminlte::adminlte.register')])
 @stop
 
 @section('auth_footer')
     <p class="my-0">
-        <a href="{{ $login_url }}">
+        <a href="{{ $loginUrl }}">
             {{ __('adminlte::adminlte.i_already_have_a_membership') }}
         </a>
     </p>

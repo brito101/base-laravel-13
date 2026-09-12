@@ -6,7 +6,7 @@
     @if(config('services.azure.client_id'))
         <div class="my-0 text-center">
             <a href="{{ route('azure.redirect') }}"
-               class="btn btn-block btn-outline-secondary"
+               class="btn btn-block btn-outline-primary text-white"
                style="display:flex;align-items:center;justify-content:center;gap:8px;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 23 23">
                     <path fill="#f3f3f3" d="M0 0h23v23H0z"/>

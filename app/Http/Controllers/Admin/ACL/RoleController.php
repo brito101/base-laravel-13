@@ -30,7 +30,7 @@ class RoleController extends Controller
             return DataTables::of($roles)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) use ($token) {
-                    return '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="role/'.$row->id.'/edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>'.'<a class="btn btn-xs btn-secondary mx-1 shadow" title="Sincronizar" href="role/'.$row->id.'/permission"><i class="fa fa-lg fa-fw fa-sync"></i></a>'.'<form method="POST" action="role/'.$row->id.'" class="btn btn-xs px-0"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="'.$token.'"><button class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" onclick="return confirm(\'Confirma a exclusão deste perfil?\')"><i class="fa fa-lg fa-fw fa-trash"></i></button></form>';
+                    return '<a class="btn btn-xs btn-primary mx-1 shadow" title="Editar" href="role/'.$row->id.'/edit"><i class="bi bi-pen"></i></a>'.'<a class="btn btn-xs btn-secondary mx-1 shadow" title="Sincronizar" href="role/'.$row->id.'/permission"><i class="bi bi-arrow-repeat"></i></a>'.'<form method="POST" action="role/'.$row->id.'" class="d-inline"><input type="hidden" name="_method" value="DELETE"><input type="hidden" name="_token" value="'.$token.'"><button class="btn btn-xs btn-danger mx-1 shadow" title="Excluir" onclick="return confirm(\'Confirma a exclusão deste perfil?\')"><i class="bi bi-trash"></i></button></form>';
                 })
                 ->rawColumns(['action'])
                 ->make();

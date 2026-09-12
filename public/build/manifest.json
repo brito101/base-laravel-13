@@ -6,7 +6,7 @@
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-C4tpvs4-.js",
+    "file": "assets/app-B5LdJB1A.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
@@ -18,7 +18,7 @@
     "isEntry": true
   },
   "resources/js/google2fa.js": {
-    "file": "assets/google2fa-DUmHlKHb.js",
+    "file": "assets/google2fa-aoZ0ZBiJ.js",
     "name": "google2fa",
     "src": "resources/js/google2fa.js",
     "isEntry": true
@@ -30,7 +30,7 @@
     "isEntry": true
   },
   "resources/sass/app.scss": {
-    "file": "assets/app-8kmmyQX2.css",
+    "file": "assets/app-B2-o0Uje.css",
     "src": "resources/sass/app.scss",
     "isEntry": true
   }

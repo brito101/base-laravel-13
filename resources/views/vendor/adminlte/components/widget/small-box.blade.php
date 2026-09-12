@@ -2,37 +2,45 @@
 
     {{-- Box title and description --}}
     <div class="inner">
-        @isset($title)
-            <h3>{{ $title }}</h3>
-        @endisset
+        @if(isset($titleSlot) || isset($title))
+            <h3>{{ $titleSlot ?? $title }}</h3>
+        @endif
 
-        @isset($text)
-            <h5>{{ $text }}</h5>
-        @endisset
+        @if(isset($textSlot) || isset($text))
+            <p>{{ $textSlot ?? $text }}</p>
+        @endif
     </div>
 
     {{-- Box icon --}}
     @isset($icon)
-        <div class="icon">
-            <i class="{{ $icon }}"></i>
-        </div>
+        <i class="{{ $makeIconClass() }}" aria-hidden="true"></i>
     @endisset
 
-    {{-- Box link --}}
-    @isset($url)
-        <a href="{{ $url }}" class="small-box-footer">
+    {{-- Box footer --}}
+    @if(isset($footerSlot) && isset($url))
+        <a href="{{ $url }}"
+            class="{{ $makeFooterLinkClass() }}">{{ $footerSlot }}</a>
+    @elseif(isset($footerSlot))
+        <div class="small-box-footer">{{ $footerSlot }}</div>
+    @elseif(isset($url))
+        <a href="{{ $url }}"
+            class="{{ $makeFooterLinkClass() }}">
 
             @if(! empty($urlText))
                 {{ $urlText }}
             @endif
 
-            <i class="fas fa-lg fa-arrow-circle-right"></i>
+            @if(! empty($footerIcon))
+                <i class="{{ $footerIcon }}" aria-hidden="true"></i>
+            @endif
         </a>
-    @endisset
+    @endif
 
-    {{-- Box overlay --}}
-    <div class="{{ $makeOverlayClass() }}">
-        <i class="fas fa-2x fa-spin fa-sync-alt text-gray"></i>
+    {{-- Box loading overlay --}}
+    <div class="{{ $makeOverlayClass() }}" style="z-index:20;">
+        <div class="spinner-border text-body-secondary" role="status">
+            <span class="visually-hidden">{{ __('adminlte::adminlte.loading') }}</span>
+        </div>
     </div>
 
 </div>
@@ -62,49 +70,52 @@
          */
         update(data)
         {
-            // Check if target and data exists.
+            const t = document.getElementById(this.target);
 
-            let t = $(`#${this.target}`);
-
-            if (t.length <= 0 || ! data) {
+            if (! t || ! data) {
                 return;
             }
 
-            // Update available data.
-
             if (data.title) {
-                t.find('.inner h3').html(data.title);
+                const title = t.querySelector('.inner h3');
+                if (title) { title.textContent = data.title; }
             }
 
             if (data.text) {
-                t.find('.inner h5').html(data.text);
+                const text = t.querySelector('.inner p');
+                if (text) { text.textContent = data.text; }
             }
 
             if (data.icon) {
-                t.find('.icon i').attr('class', data.icon);
+                const icon = t.querySelector('.small-box-icon');
+
+                if (icon) {
+                    icon.className = 'small-box-icon lh-1 ' + data.icon;
+                }
             }
 
             if (data.url) {
-                t.find('.small-box-footer').attr('href', data.url);
+                const footer = t.querySelector('a.small-box-footer');
+                if (footer) { footer.href = data.url; }
             }
         }
 
         /**
-         * Toggle the loading animation of the small box.
+         * Toggle the loading overlay of the small box.
          */
         toggleLoading()
         {
-            // Check if target exists.
+            const t = document.getElementById(this.target);
 
-            let t = $(`#${this.target}`);
-
-            if (t.length <= 0) {
+            if (! t) {
                 return;
             }
 
-            // Toggle the loading overlay.
+            const overlay = t.querySelector('.small-box-overlay');
 
-            t.find('.overlay').toggleClass('d-none');
+            if (overlay) {
+                overlay.classList.toggle('d-none');
+            }
         }
     }
 

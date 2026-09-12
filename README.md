@@ -43,7 +43,7 @@ This is a **Laravel 13 template** developed to accelerate the development of rob
 - **Robust data validation**
 
 ### 🎨 Interface
-- **AdminLTE 3** - Modern administrative interface
+- **AdminLTE 4** - Modern administrative interface
 - **Bootstrap 5** - Responsive CSS framework
 - **DataTables Server-side** - Optimized tables
 - **PWA Ready** - Progressive Web App
@@ -71,7 +71,7 @@ This is a **Laravel 13 template** developed to accelerate the development of rob
 
 ### Frontend
 - **Bootstrap 5** - CSS framework
-- **AdminLTE 3** - Administrative template
+- **AdminLTE 4** - Administrative template
 - **Vite** - Build tool
 - **SASS** - CSS preprocessor
 
