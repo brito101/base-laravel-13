@@ -51,6 +51,7 @@
                                 'Nome',
                                 'E-mail',
                                 'Tipo',
+                                ['label' => '2FA', 'width' => 8],
                                 ['label' => 'Ações', 'no-export' => true, 'width' => 10],
                             ];
                             $config = [
@@ -61,6 +62,7 @@
                                     ['data' => 'name', 'name' => 'name'],
                                     ['data' => 'email', 'name' => 'email'],
                                     ['data' => 'type', 'name' => 'type'],
+                                    ['data' => 'google2fa_secret_enabled', 'name' => 'google2fa_secret_enabled', 'searchable' => false],
                                     [
                                         'data' => 'action',
                                         'name' => 'action',

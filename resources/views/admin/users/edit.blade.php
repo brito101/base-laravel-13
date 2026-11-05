@@ -95,36 +95,13 @@
                                             name="email" value="{{ old('email') ?? $user->email }}" required>
                                     </div>
                                     <div class="col-12 col-md-6 form-group px-0 ps-md-2">
-                                        <label class="form-label"for="password">Senha</label>
-                                        <input type="password" class="form-control" id="password" placeholder="Senha"
-                                            minlength="8" maxlength="100" name="password" value=""
-                                            pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$"
-                                            title="A senha deve conter no mínimo 8 caracteres, incluindo uma letra maiúscula, uma minúscula, um número e um caractere especial">
+                                        <x-password-input placeholder="Deixe em branco para manter a atual" />
                                     </div>
                                 </div>
 
                                 <div
                                     class="col-12 col-md-6 form-group px-0 ps-md-2 d-flex flex-wrap justify-content-start">
-                                    <x-adminlte-input-switch name="google2fa_secret_enabled" id="google2fa"
-                                        label="Duplo Fator de Autenticação (Google Auth)"
-                                        :config="['onColor' => 'primary', 'state' => (bool) $user->google2fa_secret_enabled]"
-                                        data-action="{{ route('admin.user.google2fa') }}"
-                                        data-user="{{ $user->id }}" />
-
-                                    <div class="col-12 px-0 mb-3" id="seed-container">
-                                        <div>
-                                            @if (
-                                                ($user->google2fa_secret_enabled && Auth::user()->id == $user->id) ||
-                                                    ($user->google2fa_secret_enabled && Auth::user()->hasRole('Programador')))
-                                                <p class="w-100 d-inline-block px-0">
-                                                    Semente: <span
-                                                        style="letter-spacing: .2rem; margin-left: 20px; font-weight: 700;">{{ $user->google2fa_secret }}</span>
-                                                </p>
-                                                <img alt="QRCode"
-                                                    src="data:image/png;base64,{{ base64_encode($user->getQRCodeInline()) }}" />
-                                            @endif
-                                        </div>
-                                    </div>
+                                    <x-google2fa-switch :user="$user" />
                                 </div>
 
                                 <div class="d-flex flex-wrap justify-content-between">
@@ -171,5 +148,5 @@
 
 @push('js')
     <script src="{{ asset('vendor/jquery/jquery.inputmask.bundle.min.js') }}"></script>
-    @vite(['resources/js/phone.js', 'resources/js/google2fa.js'])
+    @vite('resources/js/phone.js')
 @endpush
