@@ -984,9 +984,9 @@ return [
 
                 [
                     'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/admin-lte@{version}/dist/css/adminlte-select2.min.css',
-                    'rtl' => '//cdn.jsdelivr.net/npm/admin-lte@{version}/dist/css/adminlte-select2.rtl.min.css',
+                    'asset' => true,
+                    'location' => 'vendor/adminlte/dist/css/adminlte-select2.min.css',
+                    'rtl' => 'vendor/adminlte/dist/css/adminlte-select2.rtl.min.css',
                 ],
             ],
         ],
