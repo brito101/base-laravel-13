@@ -60,7 +60,6 @@
                             'Navegador',
                             'Usuário',
                             'Método',
-                            'Requisição',
                         ];
                         $config = [
                             'ajax' => url('/admin'),
@@ -73,7 +72,6 @@
                                 ['data' => 'browser', 'name' => 'browser'],
                                 ['data' => 'name', 'name' => 'name'],
                                 ['data' => 'method', 'name' => 'method'],
-                                ['data' => 'request', 'name' => 'request'],
                             ],
                             'language' => ['url' => asset('vendor/datatables/js/pt-BR.json')],
                             'order' => [0, 'desc'],
@@ -83,13 +81,12 @@
                             'serverSide' => true,
                             'responsive' => true,
                             'lengthMenu' => [[10, 50, 100, 500, 1000, -1], [10, 50, 100, 500, 1000, 'Tudo']],
-                          
                         ];
                     @endphp
 
                     <div class="card-body">
                         <x-adminlte-datatable id="table1" :heads="$heads" :heads="$heads" :config="$config" striped
-                            hoverable beautify  with-buttons />
+                            hoverable beautify with-buttons />
                     </div>
                 </div>
 
