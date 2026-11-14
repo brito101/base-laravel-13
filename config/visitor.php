@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Visit;
 use Shetabit\Visitor\Drivers\JenssegersAgent;
 use Shetabit\Visitor\Drivers\UAParser;
 
@@ -20,6 +21,12 @@ return [
 
     // name of the table which visit records should save in
     'table_name' => 'shetabit_visits',
+
+    // database connection of the table (null = default connection)
+    'connection' => null,
+
+    // model the visits are logged with: encrypts "request" and "headers"
+    'model' => Visit::class,
 
     /*
     |--------------------------------------------------------------------------

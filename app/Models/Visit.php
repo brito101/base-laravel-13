@@ -8,7 +8,8 @@ use Shetabit\Visitor\Models\Visit as BaseVisit;
 
 /**
  * Log de visitas (shetabit/visitor) com corpo e headers da requisição
- * cifrados em repouso usando a APP_KEY.
+ * cifrados em repouso usando a APP_KEY. Registrado em config/visitor.php
+ * ("model"), usado pelo pacote em todas as gravações e relações.
  *
  * O corpo pode conter senhas, tokens e dados pessoais; os headers trazem
  * Cookie (sessão) e Authorization (Bearer/JWT). Ambos são gravados com o
@@ -16,12 +17,13 @@ use Shetabit\Visitor\Models\Visit as BaseVisit;
  */
 class Visit extends BaseVisit
 {
-    protected $casts = [
-        'request' => 'encrypted:array',
-        'headers' => 'encrypted:array',
-        'languages' => 'array',
-        'geo_raw' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return array_merge(parent::casts(), [
+            'request' => 'encrypted:array',
+            'headers' => 'encrypted:array',
+        ]);
+    }
 
     /**
      * Fragmentos de nomes de campo cujo valor nunca deve ser exibido em tela.
