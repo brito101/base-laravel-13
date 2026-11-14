@@ -31,7 +31,7 @@
         <div class="container-fluid">
 
             {{-- About the platform --}}
-            <div class="card card-outline card-secondary mb-4">
+            <div class="card card-outline card-primary mb-4">
                 <div class="card-body p-4">
                     <div class="row g-4 align-items-center">
                         <div class="col-12 col-lg-6">
