@@ -24,5 +24,9 @@
         "vue": "^3.4.27",
         "vue-router": "^4.3.2",
         "vuex": "^4.1.0"
+    },
+    "allowScripts": {
+        "@parcel/watcher@2.6.0": true,
+        "esbuild@0.25.12": true
     }
 }
