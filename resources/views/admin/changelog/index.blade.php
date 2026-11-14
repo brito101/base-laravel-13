@@ -3,28 +3,8 @@
 @section('title', '- Changelog')
 
 @php
-    $versions = [
-        [
-            'version' => '1.0.0',
-            'date' => null,
-            'changes' => [
-                'Módulo de ACL com perfis e permissões',
-                'Módulo de Usuários',
-                'Duplo fator de autenticação (2FA)',
-                'Autenticação via Azure SSO',
-                'Changelog',
-            ],
-        ],
-    ];
-
-    $stack = [
-        ['title' => 'Laravel', 'file' => 'laravel.svg'],
-        ['title' => 'PHP', 'file' => 'php.svg'],
-        ['title' => 'JavaScript', 'file' => 'javascript.svg'],
-        ['title' => 'Bootstrap', 'file' => 'bootstrap.svg'],
-        ['title' => 'HTML5', 'file' => 'html5.svg'],
-        ['title' => 'CSS3', 'file' => 'css3.svg'],
-    ];
+    $current = $releases[0] ?? null;
+    $date = fn(?string $value) => $value ? \Illuminate\Support\Carbon::parse($value)->format('d/m/Y') : null;
 @endphp
 
 @section('content')
@@ -48,104 +28,140 @@
     </div>
 
     <section class="content">
+        <div class="container-fluid">
 
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">Histórico do Sistema</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse" title="Recolher">
-                        <i class="bi bi-dash-lg"></i>
-                    </button>
+            {{-- About the platform --}}
+            <div class="card card-outline card-secondary mb-4">
+                <div class="card-body p-4">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-12 col-lg-6">
+                            <img src="{{ asset('img/favicon.svg') }}" alt="{{ config('app.name') }}" height="44"
+                                class="mb-3">
+                            <h2 class="fs-5 fw-semibold mb-1">{{ config('app.name') }}</h2>
+                            @if (!empty($about['description']))
+                                <p class="text-body-secondary mb-0">{{ $about['description'] }}</p>
+                            @endif
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <dl class="row mb-0 small changelog-meta">
+                                @if ($current)
+                                    <dt class="col-5 col-sm-4">Versão atual</dt>
+                                    <dd class="col-7 col-sm-8"><span
+                                            class="font-monospace">v{{ $current['version'] }}</span>
+                                        @if ($date($current['date'] ?? null))
+                                            <span class="text-body-secondary">· {{ $date($current['date']) }}</span>
+                                        @endif
+                                    </dd>
+                                @endif
+                                <dt class="col-5 col-sm-4">Tecnologias</dt>
+                                <dd class="col-7 col-sm-8">
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach ($about['stack'] ?? [] as $tech)
+                                            <span
+                                                class="badge rounded-pill border text-body-secondary fw-normal">{{ $tech }}</span>
+                                        @endforeach
+                                    </div>
+                                </dd>
+                                <dt class="col-5 col-sm-4">Desenvolvimento</dt>
+                                <dd class="col-7 col-sm-8">
+                                    {{ $about['author'] ?? '' }}
+                                    @isset($about['contact'])
+                                        <a href="mailto:{{ $about['contact'] }}"
+                                            class="d-block link-secondary text-decoration-none">{{ $about['contact'] }}</a>
+                                    @endisset
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card-body">
-                <div class="row g-4">
-
-                    {{-- Versionamento --}}
-                    <div class="col-12 col-lg-7 order-2 order-lg-1">
-                        <h4 class="mb-3"><i class="bi bi-clock-history me-2"></i>Versionamento</h4>
-
-                        <div class="overflow-auto pe-1" style="max-height: 60vh;">
-                            @foreach ($versions as $release)
-                                <div class="changelog-entry position-relative ps-4 pb-4">
-                                    <span class="changelog-dot"></span>
-
-                                    <div class="d-flex align-items-center gap-2 mb-2">
-                                        <span class="badge text-bg-primary fs-6">v{{ $release['version'] }}</span>
-                                        @if (!empty($release['date']))
-                                            <small class="text-muted">{{ $release['date'] }}</small>
-                                        @endif
+            {{-- Releases, newest first; each one grouped by area --}}
+            @foreach ($releases as $release)
+                <div class="card card-outline card-primary {{ $loop->last ? '' : 'mb-4' }}">
+                    <div class="card-header">
+                        <h3 class="card-title d-flex flex-wrap align-items-center gap-2">
+                            <span class="font-monospace fw-semibold text-primary">v{{ $release['version'] }}</span>
+                            @if (!empty($release['title']))
+                                <span>{{ $release['title'] }}</span>
+                            @endif
+                            @if ($loop->first)
+                                <span
+                                    class="badge rounded-pill bg-primary-subtle text-primary-emphasis border border-primary-subtle fw-normal">Atual</span>
+                            @endif
+                        </h3>
+                        @if ($date($release['date'] ?? null))
+                            <div class="card-tools">
+                                <time class="small text-body-secondary"
+                                    datetime="{{ $release['date'] }}">{{ $date($release['date']) }}</time>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body p-0">
+                        @foreach ($release['groups'] ?? ['' => $release['changes'] ?? []] as $group => $changes)
+                            <section class="row g-0 px-4 py-4 {{ $loop->last ? '' : 'border-bottom' }}">
+                                @if ($group !== '')
+                                    <div class="col-12 col-md-4 col-xl-3 pe-md-4 mb-2 mb-md-0">
+                                        <h4 class="fs-6 fw-semibold mb-0">{{ $group }}</h4>
                                     </div>
-
-                                    <ul class="list-unstyled mb-0">
-                                        @foreach ($release['changes'] as $change)
-                                            <li class="d-flex align-items-start mb-1">
-                                                <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                                                <span>{{ $change }}</span>
-                                            </li>
+                                @endif
+                                <div class="col-12 {{ $group !== '' ? 'col-md-8 col-xl-9' : '' }}">
+                                    <ul class="changelog-list mb-0">
+                                        @foreach ($changes as $change)
+                                            <li>{{ $change }}</li>
                                         @endforeach
                                     </ul>
                                 </div>
-                            @endforeach
-                        </div>
+                            </section>
+                        @endforeach
                     </div>
-
-                    {{-- Sobre --}}
-                    <div class="col-12 col-lg-5 order-1 order-lg-2">
-                        <x-adminlte-profile-widget name="{{ config('app.name') }}" desc="{{ env('APP_DES') }}"
-                            theme="primary" img="{{ asset('img/favicon.svg') }}" layout-type="classic">
-
-                            <x-adminlte-profile-row-item
-                                title="Rodrigo Carvalho de Brito &ndash; contato@rodrigobrito.dev.br"
-                                class="border-bottom border-secondary pb-2" />
-
-                            @foreach ($stack as $tech)
-                                <div class="col-4 text-center py-3">
-                                    <img src="{{ asset('img/tech/' . $tech['file']) }}" alt="{{ $tech['title'] }}"
-                                        width="40" height="40" class="tech-icon mb-2">
-                                    <p class="fw-bold small mb-0">{{ $tech['title'] }}</p>
-                                </div>
-                            @endforeach
-                        </x-adminlte-profile-widget>
-                    </div>
-
                 </div>
-            </div>
-        </div>
+            @endforeach
 
+        </div>
     </section>
 @endsection
 
 @push('css')
     <style>
-        .changelog-entry {
-            border-left: 2px solid var(--bs-border-color);
+        .changelog-meta dt {
+            font-weight: 500;
+            color: var(--bs-secondary-color);
         }
 
-        .changelog-entry:last-child {
-            border-left-color: transparent;
-            padding-bottom: 0 !important;
+        .changelog-meta dd {
+            margin-bottom: .75rem;
         }
 
-        .changelog-dot {
+        .changelog-meta dd:last-child {
+            margin-bottom: 0;
+        }
+
+        .changelog-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .changelog-list li {
+            position: relative;
+            padding-left: 1.1rem;
+            margin-bottom: .4rem;
+        }
+
+        .changelog-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .changelog-list li::before {
+            content: "";
             position: absolute;
-            left: -0.5rem;
-            top: 0.15rem;
-            width: 1rem;
-            height: 1rem;
+            left: 0;
+            top: .6em;
+            width: .35rem;
+            height: .35rem;
             border-radius: 50%;
-            background-color: var(--bs-primary);
-            border: 3px solid var(--bs-body-bg);
-        }
-
-        .tech-icon {
-            object-fit: contain;
-            transition: transform 0.15s ease-in-out;
-        }
-
-        .tech-icon:hover {
-            transform: scale(1.15);
+            background: var(--bs-secondary-color);
+            opacity: .6;
         }
     </style>
 @endpush

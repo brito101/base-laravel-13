@@ -1,0 +1,205 @@
+<?php
+define('LARAVEL_START', microtime(true));
+require getcwd() . '/vendor/autoload.php';
+$app = require getcwd() . '/bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+error_reporting(error_reporting() & ~(E_WARNING | E_CORE_WARNING | E_COMPILE_WARNING | E_USER_WARNING | E_DEPRECATED | E_USER_DEPRECATED));
+class LspHelper
+{
+public static function relativePath($path)
+{
+if (!str_contains($path, base_path())) {
+return (string) $path;
+}
+
+return ltrim(str_replace(base_path(), '', realpath($path) ?: $path), DIRECTORY_SEPARATOR);
+}
+
+public static function isVendor($path)
+{
+return str_contains($path, base_path('vendor'));
+}
+
+public static function propertyDefault(ReflectionProperty $property, ?ReflectionParameter $parameter = null): array
+{
+if ($property->hasDefaultValue()) {
+return ['default' => $property->getDefaultValue()];
+}
+
+if ($parameter?->isDefaultValueAvailable()) {
+return ['default' => $parameter->getDefaultValue()];
+}
+
+return [];
+}
+
+public static function formatDefaultValue(mixed $value): mixed
+{
+return match (true) {
+is_array($value) => 'array(...)',
+$value instanceof UnitEnum => get_class($value) . '::' . $value->name,
+$value instanceof Closure => 'Closure',
+is_object($value) => get_class($value),
+is_string($value) => var_export($value, true),
+is_null($value) => 'null',
+is_bool($value) => $value ? 'true' : 'false',
+default => $value,
+};
+}
+}
+
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+use Symfony\Component\Finder\SplFileInfo;
+
+$local = collect(File::allFiles(config_path()))
+->filter(fn (SplFileInfo $file) => $file->getExtension() === 'php')
+->map(fn (SplFileInfo $file) => $file->getPathname())
+->map(fn ($path) => [
+(string) str($path)
+->replace([config_path(DIRECTORY_SEPARATOR), '.php'], '')
+->replace(DIRECTORY_SEPARATOR, '.'),
+$path,
+]);
+
+$vendor = collect(glob(base_path('vendor/**/**/config/*.php')))->map(fn (
+$path
+) => [
+(string) str($path)
+->afterLast(DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR)
+->replace('.php', '')
+->replace(DIRECTORY_SEPARATOR, '.'),
+$path,
+]);
+
+$configPaths = $local
+->merge($vendor)
+->groupBy(0)
+->map(fn ($items) =>$items->pluck(1));
+
+$cachedContents = [];
+$cachedParsed = [];
+
+function vsCodeGetConfigValue($value, $key, $configPaths)
+{
+$parts = explode('.', $key);
+$toFind = $key;
+$found = null;
+
+while (count($parts) > 0) {
+$toFind = implode('.', $parts);
+
+if ($configPaths->has($toFind)) {
+$found = $toFind;
+break;
+}
+
+array_pop($parts);
+}
+
+if ($found === null) {
+return null;
+}
+
+$file = null;
+$line = null;
+
+if ($found === $key) {
+$file = $configPaths->get($found)[0];
+} else {
+foreach ($configPaths->get($found) as $path) {
+$cachedContents[$path] ??= file_get_contents($path);
+$cachedParsed[$path] ??= token_get_all($cachedContents[$path]);
+
+$keysToFind = str($key)
+->replaceFirst($found, '')
+->ltrim('.')
+->explode('.');
+
+if (is_numeric($keysToFind->last())) {
+$index = $keysToFind->pop();
+
+if ($index !== '0') {
+return null;
+}
+
+$key = collect(explode('.', $key));
+$key->pop();
+$key = $key->implode('.');
+$value = 'array(...)';
+}
+
+$nextKey = $keysToFind->shift();
+$expectedDepth = 1;
+
+$depth = 0;
+
+foreach ($cachedParsed[$path] as $token) {
+if ($token === '[') {
+$depth++;
+}
+
+if ($token === ']') {
+$depth--;
+}
+
+if (!is_array($token)) {
+continue;
+}
+
+$str = trim($token[1], '"\'');
+
+if (
+$str === $nextKey &&
+$depth === $expectedDepth &&
+$token[0] === T_CONSTANT_ENCAPSED_STRING
+) {
+$nextKey = $keysToFind->shift();
+$expectedDepth++;
+
+if ($nextKey === null) {
+$file = $path;
+$line = $token[2];
+break;
+}
+}
+}
+
+if ($file) {
+break;
+}
+}
+}
+
+if (is_object($value)) {
+$value = get_class($value);
+}
+
+return [
+'name' => $key,
+'value' => $value,
+'file' => $file === null ? null : str_replace(base_path(DIRECTORY_SEPARATOR), '', $file),
+'line' => $line,
+];
+}
+
+function vsCodeUnpackDottedKey($value, $key)
+{
+$arr = [$key => $value];
+$parts = explode('.', $key);
+array_pop($parts);
+
+while (count($parts)) {
+$arr[implode('.', $parts)] = 'array(...)';
+array_pop($parts);
+}
+
+return $arr;
+}
+
+echo collect(Arr::dot(config()->all()))
+->mapWithKeys(fn ($value, $key) => vsCodeUnpackDottedKey($value, $key))
+->map(fn ($value, $key) => vsCodeGetConfigValue($value, $key, $configPaths))
+->filter()
+->values()
+->toJson();

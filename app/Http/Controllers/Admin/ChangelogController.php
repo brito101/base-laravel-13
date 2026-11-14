@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 
 class ChangelogController extends Controller
 {
-    public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    /** Releases and project details come from config/changelog.php. */
+    public function index(): View
     {
-        return view('admin.changelog.index');
+        return view('admin.changelog.index', [
+            'releases' => config('changelog.releases', []),
+            'about' => config('changelog.about', []),
+        ]);
     }
 }
