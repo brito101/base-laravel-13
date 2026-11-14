@@ -107,9 +107,10 @@
                                         <span>Acessos Diários</span>
                                     </p>
                                     <p class="ms-auto d-flex flex-column text-end">
-                                        <span id="percentclass" class="{{ $percent > 0 ? 'text-success' : 'text-danger' }}">
+                                        @php($percentUp = (float) str_replace(['.', ','], ['', '.'], (string) $percent) > 0)
+                                        <span id="percentclass" class="{{ $percentUp ? 'text-success' : 'text-danger' }}">
                                             <i id="percenticon"
-                                                class="bi {{ $percent > 0 ? 'bi-arrow-up' : 'bi-arrow-down' }}  me-1"></i><span
+                                                class="bi {{ $percentUp ? 'bi-arrow-up' : 'bi-arrow-down' }} me-1"></i><span
                                                 id="percentvalue">{{ $percent }}</span>%
                                         </span>
                                         <span class="text-muted">em relação ao dia anterior</span>
@@ -186,17 +187,11 @@
                             $("#percentvalue").text(data.percent);
                             const percentclass = $("#percentclass");
                             const percenticon = $("#percenticon");
-                            percentclass.removeClass('text-success');
-                            percentclass.removeClass('text-danger');
-                            percenticon.removeClass('fa-arrow-up');
-                            percenticon.removeClass('fa-arrow-down');
-                            if (parseInt(data.percent) > 0) {
-                                percentclass.addClass('text-success');
-                                percenticon.addClass('fa-arrow-up');
-                            } else {
-                                percentclass.addClass('text-danger');
-                                percenticon.addClass('fa-arrow-down');
-                            }
+                            // percent vem formatado em pt-BR ("1.234,50")
+                            const percent = parseFloat(String(data.percent).replace(/\./g, '').replace(',', '.'));
+                            const up = percent > 0;
+                            percentclass.toggleClass('text-success', up).toggleClass('text-danger', !up);
+                            percenticon.toggleClass('bi-arrow-up', up).toggleClass('bi-arrow-down', !up);
                         }
                     });
                 };
