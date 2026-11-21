@@ -223,7 +223,8 @@ return [
         'activities' => 'atividades',
         'photo' => 'foto',
         'first_access' => 'primeiro acesso',
-        'google_2fa' => 'duplo fator',
+        'google_2fa' => '2FA',
+        'google2fa' => '2FA',
     ],
 
 ];
